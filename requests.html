@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+{% block title %}Learning requests | SkillBridge{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">YOUR CONNECTIONS</span><h1>Learning requests</h1><p class="muted">Accept requests to unlock messaging and video calls.</p></div></div>
+
+<div class="two-panels">
+<section class="panel">
+    <h2>Requests received</h2>
+    {% for item in received %}
+    <div class="request-card">
+        <h3>{{ item['learner_name'] }}</h3>
+        <p>Wants to learn: <strong>{{ item['skill_name'] }}</strong></p>
+        <span class="badge badge-{{ item['status']|lower }}">{{ item['status'] }}</span>
+        {% if item['status'] == 'Pending' %}
+        <div class="button-group top-gap">
+            <form method="POST" action="{{ url_for('update_request', request_id=item['id']) }}"><input type="hidden" name="status" value="Accepted"><button class="btn btn-primary" type="submit">Accept</button></form>
+            <form method="POST" action="{{ url_for('update_request', request_id=item['id']) }}"><input type="hidden" name="status" value="Rejected"><button class="btn btn-outline" type="submit">Reject</button></form>
+        </div>
+        {% elif item['status'] == 'Accepted' %}
+        <p><a class="btn btn-primary" href="{{ url_for('messages', request_id=item['id']) }}">Message learner</a></p>
+        {% endif %}
+    </div>
+    {% else %}
+    <p class="muted">No requests received yet.</p>
+    {% endfor %}
+</section>
+
+<section class="panel">
+    <h2>Requests sent</h2>
+    {% for item in sent %}
+    <div class="request-card">
+        <h3>{{ item['skill_name'] }}</h3>
+        <p>Mentor: {{ item['mentor_name'] }}</p>
+        <span class="badge badge-{{ item['status']|lower }}">{{ item['status'] }}</span>
+        {% if item['status'] == 'Accepted' %}
+        <div class="button-group top-gap">
+            <a class="btn btn-primary" href="{{ url_for('messages', request_id=item['id']) }}">Messages</a>
+            <a class="btn btn-outline" href="{{ url_for('video', request_id=item['id']) }}">Video call</a>
+        </div>
+        {% elif item['status'] == 'Pending' %}
+        <p class="muted">Waiting for the mentor to respond.</p>
+        {% else %}
+        <p class="muted">This request was declined.</p>
+        {% endif %}
+    </div>
+    {% else %}
+    <p class="muted">You haven't sent any requests.</p>
+    <a href="{{ url_for('skills') }}">Find a mentor →</a>
+    {% endfor %}
+</section>
+</div>
+{% endblock %}

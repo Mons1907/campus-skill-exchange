@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% block title %}Messages | SkillBridge{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">STAY CONNECTED</span><h1>Messages and sessions</h1><p class="muted">Your accepted learning connections.</p></div></div>
+<section class="panel">
+    <h2>Your conversations</h2>
+    {% for item in partners %}
+    <div class="conversation-row">
+        <div class="conversation-info">
+            <strong>{{ item['partner_name'] }}</strong>
+            <small>Learning: {{ item['skill_name'] }}</small>
+            <p>{{ item['last_message'] or 'Send the first message!' }}</p>
+        </div>
+        <div class="button-group">
+            <a class="btn btn-primary" href="{{ url_for('messages', request_id=item['request_id']) }}">Message</a>
+            <a class="btn btn-outline" href="{{ url_for('video', request_id=item['request_id']) }}">Video call</a>
+        </div>
+    </div>
+    {% else %}
+    <p class="muted">No conversations yet. Accept or receive an accepted learning request first.</p>
+    <a class="btn btn-primary" href="{{ url_for('skills') }}">Explore mentors</a>
+    {% endfor %}
+</section>
+{% endblock %}

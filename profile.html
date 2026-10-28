@@ -1,0 +1,17 @@
+
+{% extends "base.html" %}
+{% block title %}My profile | SkillBridge{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">YOUR SPACE</span><h1>My profile</h1><p class="muted">Tell other students about yourself.</p></div></div>
+<section class="panel profile-panel">
+    <form method="POST" class="form-stack">
+        <label for="name">Display name</label>
+        <input id="name" name="name" maxlength="100" required value="{{ student['name'] }}">
+        <label for="email">Email address</label>
+        <input id="email" value="{{ student['email'] }}" disabled>
+        <label for="bio">About me</label>
+        <textarea id="bio" name="bio" maxlength="500" placeholder="What skills do you enjoy?">{{ student['bio'] }}</textarea>
+        <button class="btn btn-primary" type="submit">Save profile</button>
+    </form>
+</section>
+{% endblock %}

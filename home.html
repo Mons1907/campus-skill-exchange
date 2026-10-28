@@ -1,0 +1,39 @@
+
+{% extends "base.html" %}
+{% block title %}SkillBridge | Campus Skill Exchange{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <span class="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</span>
+        <h1>Learn together.<br><span>Go further.</span></h1>
+        <p>A campus community where students teach what they know, learn what they love, and help each other grow.</p>
+        <div class="actions">
+            <a class="btn btn-primary" href="{{ url_for('register') }}">Get started →</a>
+            <a class="btn btn-outline" href="{{ url_for('login') }}">I have an account</a>
+        </div>
+        <p class="muted">✦ Peer learning made simple</p>
+    </div>
+    <div class="hero-card">
+        <div class="feature-icon">SB</div>
+        <h2>Knowledge is better when shared.</h2>
+        <p>Find your people. Exchange your skills.</p>
+        <div class="skill-cloud">
+            <span>Python</span><span>UI/UX</span><span>Communication</span><span>Web design</span>
+        </div>
+    </div>
+</section>
+<section class="public-stats">
+    <div><strong>{{ mentor_count }}</strong><span>Student mentors</span></div>
+    <div><strong>{{ skill_count }}</strong><span>Skills available</span></div>
+    <div><strong>Anywhere</strong><span>Learn online</span></div>
+</section>
+<section class="section" id="how-it-works">
+    <div class="section-head"><span class="eyebrow">HOW IT WORKS</span><h2>Small steps. Big skills.</h2></div>
+    <div class="feature-grid">
+        <article class="feature-card"><div class="feature-icon">01</div><h3>Share your skills</h3><p>Add skills you can teach or want to learn.</p></article>
+        <article class="feature-card"><div class="feature-icon">02</div><h3>Find your mentor</h3><p>Search skills and send learning requests.</p></article>
+        <article class="feature-card"><div class="feature-icon">03</div><h3>Learn anywhere</h3><p>Message mentors and join video calls.</p></article>
+    </div>
+</section>
+<footer class="footer">SkillBridge · Campus Skill Exchange Platform</footer>
+{% endblock %}

@@ -1,0 +1,84 @@
+
+{% extends "base.html" %}
+{% block title %}Explore skills | SkillBridge{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div><span class="eyebrow">DISCOVER & SHARE</span><h1>Skills marketplace</h1><p class="muted">Find mentors and manage your own skills.</p></div>
+</div>
+
+<section class="panel" id="add-skill">
+    <h2>Add a skill</h2>
+    <form method="POST" class="skill-form">
+        <div><label for="skill_name">Skill name</label><input id="skill_name" name="skill_name" maxlength="100" required placeholder="e.g. Python"></div>
+        <div><label for="skill_type">I want to...</label>
+            <select id="skill_type" name="skill_type" required>
+                <option value="Teach">Teach others</option>
+                <option value="Learn">Learn from others</option>
+            </select>
+        </div>
+        <div class="form-wide"><label for="description">Description</label><textarea id="description" name="description" maxlength="500" placeholder="Describe the skill or learning goal"></textarea></div>
+        <div class="form-wide"><button class="btn btn-primary" type="submit">+ Save skill</button></div>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Find a student mentor</h2>
+    <form method="GET" class="search-row">
+        <input name="search" value="{{ search }}" placeholder="Search skills or student names...">
+        <select name="category">
+            {% for option in ['All','Programming','Design','Academic','Communication','Other'] %}
+            <option value="{{ option }}" {% if category == option %}selected{% endif %}>{{ option }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+
+    <div class="feature-grid">
+        {% for skill in results %}
+        <article class="feature-card">
+            <span class="tag">STUDENT MENTOR</span>
+            <h3>{{ skill['skill_name'] }}</h3>
+            <p>{{ skill['description'] or 'Ready to share knowledge.' }}</p>
+            <p class="muted">Mentor: {{ skill['mentor_name'] }}</p>
+            <form method="POST" action="{{ url_for('send_request', skill_id=skill['id']) }}">
+                <button class="btn btn-primary full-width" type="submit">Request to learn</button>
+            </form>
+        </article>
+        {% else %}
+        <p class="muted">No mentors found. Try another search or invite a classmate.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="two-panels">
+    <section class="panel">
+        <h2>Skills I Can Teach</h2>
+        {% set teach_skills = my_skills|selectattr('skill_type','equalto','Teach')|list %}
+        {% for skill in teach_skills %}
+        <div class="list-row">
+            <div><strong>{{ skill['skill_name'] }}</strong><p class="muted">{{ skill['description'] }}</p></div>
+            <form method="POST" action="{{ url_for('delete_skill', skill_id=skill['id']) }}" data-confirm="Remove this skill?">
+                <button class="icon-button" type="submit">×</button>
+            </form>
+        </div>
+        {% else %}
+        <p class="muted">You haven't added any teaching skills yet.</p>
+        {% endfor %}
+    </section>
+
+    <section class="panel">
+        <h2>Skills I Want to Learn</h2>
+        {% set learn_skills = my_skills|selectattr('skill_type','equalto','Learn')|list %}
+        {% for skill in learn_skills %}
+        <div class="list-row">
+            <div><strong>{{ skill['skill_name'] }}</strong><p class="muted">{{ skill['description'] }}</p></div>
+            <form method="POST" action="{{ url_for('delete_skill', skill_id=skill['id']) }}" data-confirm="Remove this learning goal?">
+                <button class="icon-button" type="submit">×</button>
+            </form>
+        </div>
+        {% else %}
+        <p class="muted">You haven't added any learning goals yet.</p>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

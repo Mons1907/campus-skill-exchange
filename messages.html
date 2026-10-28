@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+{% block title %}Chat | SkillBridge{% endblock %}
+{% block content %}
+<div class="chat-page">
+    <section class="panel">
+        <div class="chat-header">
+            <div><a href="{{ url_for('conversations') }}">← Inbox</a></div>
+            <div><h2>{{ conversation['partner_name'] }}</h2><p class="muted">{{ conversation['skill_name'] }}</p></div>
+            <a class="btn btn-primary" href="{{ url_for('video', request_id=conversation['id']) }}">Video call</a>
+        </div>
+
+        <div id="chat-box" class="chat-box"
+             data-request-id="{{ conversation['id'] }}"
+             data-current-id="{{ session['student_id'] }}">
+            {% for item in chat_messages %}
+            <div class="chat-line {% if item['sender_id'] == session['student_id'] %}mine{% else %}theirs{% endif %}">
+                <div class="chat-bubble">{{ item['message'] }}<small>{{ item['sent_at'] }}</small></div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <form method="POST" class="chat-form">
+            <input name="message" maxlength="2000" required autocomplete="off" placeholder="Write a message...">
+            <button class="btn btn-primary" type="submit">Send ↑</button>
+        </form>
+        <p class="muted">New messages are checked automatically every three seconds.</p>
+    </section>
+</div>
+{% endblock %}

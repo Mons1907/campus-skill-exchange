@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SkillBridge{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if session.get('student_id') %}
+<aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}">Skill<span>Bridge</span></a>
+    <p class="sidebar-label">WORKSPACE</p>
+    <a class="side-link" href="{{ url_for('dashboard') }}">▦ Dashboard</a>
+    <a class="side-link" href="{{ url_for('skills') }}">✦ Explore mentors</a>
+    <a class="side-link" href="{{ url_for('requests_page') }}">↔ Learning requests {% if pending_count %}({{ pending_count }}){% endif %}</a>
+    <a class="side-link" href="{{ url_for('conversations') }}">☏ Messages</a>
+    <a class="side-link" href="{{ url_for('profile') }}">☺ My profile</a>
+    <div class="sidebar-bottom">
+        <p>{{ session.get('student_name', 'Student') }}</p>
+        <form method="POST" action="{{ url_for('logout') }}">
+            <button class="side-link logout-link" type="submit">↪ Log out</button>
+        </form>
+    </div>
+</aside>
+{% endif %}
+
+<main class="{% if session.get('student_id') %}main-with-sidebar{% else %}main-public{% endif %}">
+{% if not session.get('student_id') %}
+<header class="topbar">
+    <a class="brand" href="{{ url_for('home') }}">Skill<span>Bridge</span></a>
+    <nav>
+        <a href="{{ url_for('home') }}#how-it-works">How it works</a>
+        <a href="{{ url_for('login') }}">Log in</a>
+        <a class="btn btn-primary" href="{{ url_for('register') }}">Join now</a>
+    </nav>
+</header>
+{% endif %}
+
+<div class="flash-stack">
+{% for category, message in get_flashed_messages(with_categories=true) %}
+    <div class="flash {{ category }}">{{ message }}</div>
+{% endfor %}
+</div>
+
+{% block content %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

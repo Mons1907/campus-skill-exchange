@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% block title %}Video learning room | SkillBridge{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div><span class="eyebrow">LEARN FROM ANYWHERE</span><h1>Video learning room</h1><p class="muted">Session with {{ conversation['partner_name'] }} · {{ conversation['skill_name'] }}</p></div>
+    <a class="btn btn-outline" href="{{ url_for('messages', request_id=conversation['id']) }}">Back to messages</a>
+</div>
+
+<div class="video-notice">
+    <strong>Before you join</strong>
+    <span>Allow camera and microphone permissions. Both participants must open the same room. This demo uses the public Jitsi service; the room is not protected by your app login alone.</span>
+</div>
+
+<div class="video-frame-wrap">
+    <iframe
+        src="https://meet.jit.si/{{ conversation['room_code'] }}"
+        title="SkillBridge video learning room"
+        allow="camera; microphone; fullscreen; display-capture; autoplay"
+        allowfullscreen>
+    </iframe>
+</div>
+
+<p><a class="btn btn-primary" href="https://meet.jit.si/{{ conversation['room_code'] }}" target="_blank" rel="noopener noreferrer">Open video in a new tab ↗</a></p>
+{% endblock %}

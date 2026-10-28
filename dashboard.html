@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+{% block title %}Dashboard | SkillBridge{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div><span class="eyebrow">YOUR LEARNING SPACE</span><h1>Welcome, {{ session.get('student_name') }}!</h1><p class="muted">What would you like to learn today?</p></div>
+    <a class="btn btn-primary" href="{{ url_for('skills') }}#add-skill">+ Add a skill</a>
+</div>
+
+<div class="stats-grid">
+    <article class="stat-card"><span>Skills I teach</span><strong>{{ teach_count }}</strong></article>
+    <article class="stat-card"><span>Skills I want to learn</span><strong>{{ learn_count }}</strong></article>
+    <article class="stat-card"><span>Requests sent</span><strong>{{ sent_count }}</strong><small>{{ received_count }} pending requests received</small></article>
+</div>
+
+<section class="panel">
+    <h2>Quick actions</h2>
+    <div class="feature-grid">
+        <a class="feature-card" href="{{ url_for('skills') }}"><div class="feature-icon">⌕</div><h3>Find a mentor</h3><p>Search skills offered by students.</p></a>
+        <a class="feature-card" href="{{ url_for('requests_page') }}"><div class="feature-icon">↔</div><h3>Learning requests</h3><p>Accept or track connections.</p></a>
+        <a class="feature-card" href="{{ url_for('conversations') }}"><div class="feature-icon">☏</div><h3>Messages and calls</h3><p>Chat with accepted connections.</p></a>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Mentors to explore</h2>
+    <div class="feature-grid">
+        {% for skill in recent %}
+        <article class="feature-card">
+            <h3>{{ skill['skill_name'] }}</h3>
+            <p>{{ skill['description'] or 'Available to help other students learn.' }}</p>
+            <small>Mentor: {{ skill['mentor_name'] }}</small>
+            <p><a href="{{ url_for('skills') }}">Explore mentors →</a></p>
+        </article>
+        {% else %}
+        <p class="muted">No mentor listings yet. Add a skill or invite a classmate.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
